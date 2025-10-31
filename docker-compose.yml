@@ -1,0 +1,22 @@
+
+version: '3.8'
+
+services:
+  mcp-pishock-server:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - PISHOCK_USERNAME=${PISHOCK_USERNAME}
+      - PISHOCK_APIKEY=${PISHOCK_APIKEY}
+      - PISHOCK_CODE=${PISHOCK_CODE}
+      - MCP_AUTH_TOKEN=${MCP_AUTH_TOKEN}
+      - SCRIPT_NAME=${SCRIPT_NAME:-MCP_Server}
+    volumes:
+      - ./app.py:/app/app.py  # Pour le développement
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
